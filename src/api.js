@@ -5,18 +5,24 @@ const api = axios.create({
 });
 
 const createDeckAndDraw = async () => {
-  const { data } = await api.get('new/draw', {
+  const { data } = await api.get('new/shuffle/', {
+    params: {
+      deck_count: 1
+    }
+  });
+  const {deck_id} = data;
+  const { data: cardsResponse } =  await api.get(`${deck_id}/draw/`, {
     params: {
       count: 1
     }
-  });
-  const { deck_id, cards } = data;
-  const { value, image } = data.cards[0];
-  return { deck_id, value, image };
+  })
+
+  return {...cardsResponse.cards[0], deck_id} ;
+
 };
 
 const redrawCardFromDeck = async ({ deckId }) => {
-  const { data } = await api.get(`${deckId}/draw`, {
+  const { data } = await api.get(`${deckId}/draw/`, {
     params: {
       count: 1
     }
@@ -27,3 +33,4 @@ const redrawCardFromDeck = async ({ deckId }) => {
 };
 
 export { createDeckAndDraw, redrawCardFromDeck };
+

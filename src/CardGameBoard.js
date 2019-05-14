@@ -1,9 +1,9 @@
 import React from 'react';
-
+import { createDeckAndDraw, redrawCardFromDeck } from './api';
 import ButtonsTab from './ButtonsTab';
 import { CardLayout } from './Layout.components';
-import { createDeckAndDraw, redrawCardFromDeck } from './api';
 import compareValues from './utils';
+
 
 class CardGameBoard extends React.Component {
   state = {
@@ -24,6 +24,9 @@ class CardGameBoard extends React.Component {
   };
 
   onButtonClick = async ({ target: { name: bet } }) => {
+    this.setState({
+      cardImageUrl: null
+        })
     const { deckId, cardValue } = this.state;
     const { value, image } = await redrawCardFromDeck({ deckId });
     const result = compareValues({
