@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createDeckAndDraw, redrawCardFromDeck } from './api';
+import { redrawCardFromDeck } from './api';
 import ButtonsTab from './ButtonsTab';
 import { CardLayout } from './Layout.components';
+import { fetchNewDeck } from './redux/deck/deckActions';
 import { addResult } from './redux/result/resultActions';
 import compareValues from './utils';
 
@@ -17,12 +18,7 @@ class CardGameBoard extends React.Component {
   };
 
   componentDidMount = async () => {
-    const { deck_id, value, image } = await createDeckAndDraw();
-    this.setState({
-      cardValue: value,
-      cardImageUrl: image,
-      deckId: deck_id
-    });
+    this.props.fetchNewDeck();
   };
 
   onButtonClick = async ({ target: { name: bet } }) => {
@@ -51,13 +47,10 @@ class CardGameBoard extends React.Component {
   };
 
   render() {
-    const { cardImageUrl, result } = this.state;
-    if (!cardImageUrl) {
-      return <h1>Loading..</h1>;
-    }
+    const { result, image } = this.props;
     return (
       <CardLayout>
-        <img src={cardImageUrl} />
+        <img src={image} />
         <ButtonsTab onButtonClick={this.onButtonClick} />
         {result && <h2>{`You, my dear friend ${result}`}</h2>}
       </CardLayout>
@@ -66,14 +59,15 @@ class CardGameBoard extends React.Component {
 }
 
 
-const mapState = state => {
-  // console.log(state);
-  return state;
-}
+const mapState = ({deck}) => ({
+  deckId: deck.deckId,
+  image: deck.image,
+  value: deck.value
+})
 
 const mapDispatch = dispatch => ({
-  // console.log(dispatch);
+  fetchNewDeck: () => dispatch(fetchNewDeck()),
   addResult: (args) => dispatch(addResult(args))
 })
 
-export default connect(null, mapDispatch)(CardGameBoard);
+export default connect(mapState, mapDispatch)(CardGameBoard);

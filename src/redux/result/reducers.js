@@ -1,7 +1,6 @@
 import { ADD_RESULT, REMOVE_RESULT } from "./resultActions";
 
 const results = (state = [], action) => {
-  console.log(action);
   switch (action.type) {
     case ADD_RESULT:
       return [
