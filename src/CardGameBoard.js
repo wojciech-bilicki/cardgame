@@ -1,7 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { createDeckAndDraw, redrawCardFromDeck } from './api';
 import ButtonsTab from './ButtonsTab';
 import { CardLayout } from './Layout.components';
+import { addResult } from './redux/result/resultActions';
 import compareValues from './utils';
 
 
@@ -40,6 +42,12 @@ class CardGameBoard extends React.Component {
       cardValue: value,
       cardImageUrl: image
     });
+    this.props.addResult({
+      result,
+      bet,
+      currentCardValue: value,
+      previousCardValue: cardValue
+    });
   };
 
   render() {
@@ -57,4 +65,15 @@ class CardGameBoard extends React.Component {
   }
 }
 
-export default CardGameBoard;
+
+const mapState = state => {
+  // console.log(state);
+  return state;
+}
+
+const mapDispatch = dispatch => ({
+  // console.log(dispatch);
+  addResult: (args) => dispatch(addResult(args))
+})
+
+export default connect(null, mapDispatch)(CardGameBoard);

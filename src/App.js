@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { Layout, Header } from './Layout.components';
 import CardGameBoard from './CardGameBoard';
+import LastResults from './LastResults';
 import './App.css';
 
 class App extends Component {
@@ -11,6 +12,7 @@ class App extends Component {
         <Header>Join our card game!</Header>
         <Layout>
           <CardGameBoard />
+          <LastResults />
         </Layout>
       </div>
     );
